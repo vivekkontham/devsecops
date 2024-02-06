@@ -25,6 +25,10 @@ jobs:
         distribution: 'temurin'
     - name: Dependency Check
       run: mvn org.owasp:dependency-check-maven:check
+    - name: upload artifact
+      with:
+          name: dependency report
+          path: /home/runner/work/devsecops/devsecops/target/dependency-check-report.html
     - name: Build with Maven
       run: mvn package --file pom.xml
     - name: test with Maven
