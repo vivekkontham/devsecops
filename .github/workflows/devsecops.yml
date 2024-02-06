@@ -24,4 +24,4 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
     - name: Build with Maven
-      run: mvn package
+      run: mvn package --file pom.xml
