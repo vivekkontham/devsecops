@@ -18,59 +18,68 @@
     </license>
   </licenses>
 
+  <!-- Properties -->
   <properties>
     <java.version>17</java.version>
     <jersey.version>2.38</jersey.version>
     <junit.version>5.9.2</junit.version>
     <maven.compiler.release>${java.version}</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <sat.version>v0.15.0</sat.version>
   </properties>
 
-
-  <profile>
-    <id>check</id>
-    <build>
+  <!-- Profiles -->
+  <profiles>
+    <profile>
+      <id>check</id>
+      <build>
         <pluginManagement>
-        <plugins>
+          <plugins>
+            <!-- Static Analysis Tools Plugin -->
             <plugin>
-            <groupId>org.openhab.tools.sat</groupId>
-            <artifactId>sat-plugin</artifactId>
-            <version>v0.15.0</version>
-            <executions>
+              <groupId>org.openhab.tools.sat</groupId>
+              <artifactId>sat-plugin</artifactId>
+              <version>${sat.version}</version>
+              <executions>
                 <execution>
-                <phase>verify</phase>
-                <goals>
+                  <phase>verify</phase>
+                  <goals>
                     <goal>checkstyle</goal>
                     <goal>pmd</goal>
                     <goal>spotbugs</goal>
                     <goal>report</goal>
-                </goals>
+                  </goals>
                 </execution>
-            </executions>
+              </executions>
             </plugin>
-        </plugins>
+          </plugins>
         </pluginManagement>
-    </build>
-  </profile>
-  <profile>
-    <id>check-bundles</id>
-    <activation>
+      </build>
+    </profile>
+
+    <profile>
+      <id>check-bundles</id>
+      <activation>
         <file>
-        <exists>src</exists>
+          <exists>src</exists>
         </file>
-    </activation>
-    <build>
+      </activation>
+      <build>
         <plugins>
-        <plugin>
+          <!-- Additional plugins for the check-bundles profile -->
+          <plugin>
             <groupId>org.openhab.tools.sat</groupId>
             <artifactId>sat-plugin</artifactId>
-        </plugin>
+          </plugin>
         </plugins>
-    </build>
-  </profile>
+      </build>
+    </profile>
+  </profiles>
 
+  <!-- Dependency Management -->
   <dependencyManagement>
     <dependencies>
+      <!-- Jersey BOM -->
       <dependency>
         <groupId>org.glassfish.jersey</groupId>
         <artifactId>jersey-bom</artifactId>
@@ -78,23 +87,26 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+      <!-- JUnit BOM -->
       <dependency>
-	    <groupId>org.junit</groupId>
-	    <artifactId>junit-bom</artifactId>
-	    <version>${junit.version}</version>
-	    <type>pom</type>
-	    <scope>import</scope>
+        <groupId>org.junit</groupId>
+        <artifactId>junit-bom</artifactId>
+        <version>${junit.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
 
+  <!-- Dependencies -->
   <dependencies>
-
+    <!-- Jersey Container -->
     <dependency>
       <groupId>org.glassfish.jersey.containers</groupId>
       <artifactId>jersey-container-grizzly2-http</artifactId>
     </dependency>
 
+    <!-- Jersey HK2 -->
     <dependency>
       <groupId>org.glassfish.jersey.inject</groupId>
       <artifactId>jersey-hk2</artifactId>
@@ -106,17 +118,18 @@
       </exclusions>
     </dependency>
 
+    <!-- JUnit Jupiter -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
       <scope>test</scope>
     </dependency>
-
   </dependencies>
 
+  <!-- Build -->
   <build>
     <plugins>
-
+      <!-- Compiler Plugin -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -127,6 +140,7 @@
         </configuration>
       </plugin>
 
+      <!-- Surefire Plugin -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
@@ -135,11 +149,12 @@
           <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-	        <version>${junit.version}</version>
+            <version>${junit.version}</version>
           </dependency>
         </dependencies>
       </plugin>
 
+      <!-- Shade Plugin -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
@@ -163,18 +178,19 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-	    <groupId>org.owasp</groupId>
-	    <artifactId>dependency-check-maven</artifactId>
-	    <executions>
-	        <execution>
-	            <goals>
-	                <goal>check</goal>
-	            </goals>
-	        </execution>
-	    </executions>
-     </plugin>
 
+      <!-- OWASP Dependency-Check Plugin -->
+      <plugin>
+        <groupId>org.owasp</groupId>
+        <artifactId>dependency-check-maven</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 
