@@ -44,5 +44,5 @@ jobs:
     - name: docker build & Push
       run: |
         docker build -t test:v1 .
-        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        docker login registry-1.docker.io/v1 -u $DOCKER_USER -p $DOCKER_PASSWORD
         docker push vivekkontham/devsecops-github:v1
